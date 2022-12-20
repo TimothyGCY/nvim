@@ -5,8 +5,8 @@
 #### Target Available Language
 | Language |Status |
 | - | - |
-| Java | To observe |
-| Kotlin | To observe |
+| Java | ✅ |
+| Kotlin | ✅ |
 | Swift | ❎ |
 | Objective-C | ❎ |
 | Javascript | ✅ |
