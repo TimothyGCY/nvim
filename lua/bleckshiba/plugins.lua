@@ -42,6 +42,7 @@ function(use)
 			{'rafamadriz/friendly-snippets'},
 		}
 	}
+	use 'windwp/nvim-autopairs'
 
 	use {
 		'akinsho/flutter-tools.nvim',

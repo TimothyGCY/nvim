@@ -105,7 +105,7 @@ _G.packer_plugins = {
     url = "https://github.com/saadparwaiz1/cmp_luasnip"
   },
   ["commented.nvim"] = {
-    config = { "\27LJ\2\nš\2\0\0\4\0\6\0\t6\0\0\0'\2\1\0B\0\2\0029\0\2\0005\2\4\0005\3\3\0=\3\5\2B\0\2\1K\0\1\0\25codetags_keybindings\1\0\0\1\0\n\ttodo\14<leader>t\rwont_fix\14<leader>w\15fixme_line\15<leader>ff\18wont_fix_line\15<leader>ww\nfixme\14<leader>f\14note_line\15<leader>nn\tnote\14<leader>n\rbug_line\15<leader>bb\bbug\14<leader>b\14todo_line\15<leader>tt\nsetup\14commented\frequire\0" },
+    config = { "\27LJ\2\nš\2\0\0\4\0\6\0\t6\0\0\0'\2\1\0B\0\2\0029\0\2\0005\2\4\0005\3\3\0=\3\5\2B\0\2\1K\0\1\0\25codetags_keybindings\1\0\0\1\0\n\rwont_fix\14<leader>w\tnote\14<leader>n\rbug_line\15<leader>bb\bbug\14<leader>b\14todo_line\15<leader>tt\ttodo\14<leader>t\15fixme_line\15<leader>ff\18wont_fix_line\15<leader>ww\nfixme\14<leader>f\14note_line\15<leader>nn\nsetup\14commented\frequire\0" },
     loaded = true,
     path = "C:\\Users\\USER\\AppData\\Local\\nvim-data\\site\\pack\\packer\\start\\commented.nvim",
     url = "https://github.com/winston0410/commented.nvim"
@@ -144,6 +144,11 @@ _G.packer_plugins = {
     loaded = true,
     path = "C:\\Users\\USER\\AppData\\Local\\nvim-data\\site\\pack\\packer\\start\\mason.nvim",
     url = "https://github.com/williamboman/mason.nvim"
+  },
+  ["nvim-autopairs"] = {
+    loaded = true,
+    path = "C:\\Users\\USER\\AppData\\Local\\nvim-data\\site\\pack\\packer\\start\\nvim-autopairs",
+    url = "https://github.com/windwp/nvim-autopairs"
   },
   ["nvim-cmp"] = {
     loaded = true,
@@ -195,10 +200,9 @@ _G.packer_plugins = {
     path = "C:\\Users\\USER\\AppData\\Local\\nvim-data\\site\\pack\\packer\\start\\telescope.nvim",
     url = "https://github.com/nvim-telescope/telescope.nvim"
   },
-  tokyonight = {
-    config = { "\27LJ\2\n:\0\0\3\0\3\0\0056\0\0\0009\0\1\0'\2\2\0B\0\2\1K\0\1\0\27colorscheme tokyonight\bcmd\bvim\0" },
+  ["tokyonight.nvim"] = {
     loaded = true,
-    path = "C:\\Users\\USER\\AppData\\Local\\nvim-data\\site\\pack\\packer\\start\\tokyonight",
+    path = "C:\\Users\\USER\\AppData\\Local\\nvim-data\\site\\pack\\packer\\start\\tokyonight.nvim",
     url = "https://github.com/folke/tokyonight.nvim"
   },
   undotree = {
@@ -211,12 +215,8 @@ _G.packer_plugins = {
 time([[Defining packer_plugins]], false)
 -- Config for: commented.nvim
 time([[Config for commented.nvim]], true)
-try_loadstring("\27LJ\2\nš\2\0\0\4\0\6\0\t6\0\0\0'\2\1\0B\0\2\0029\0\2\0005\2\4\0005\3\3\0=\3\5\2B\0\2\1K\0\1\0\25codetags_keybindings\1\0\0\1\0\n\ttodo\14<leader>t\rwont_fix\14<leader>w\15fixme_line\15<leader>ff\18wont_fix_line\15<leader>ww\nfixme\14<leader>f\14note_line\15<leader>nn\tnote\14<leader>n\rbug_line\15<leader>bb\bbug\14<leader>b\14todo_line\15<leader>tt\nsetup\14commented\frequire\0", "config", "commented.nvim")
+try_loadstring("\27LJ\2\nš\2\0\0\4\0\6\0\t6\0\0\0'\2\1\0B\0\2\0029\0\2\0005\2\4\0005\3\3\0=\3\5\2B\0\2\1K\0\1\0\25codetags_keybindings\1\0\0\1\0\n\rwont_fix\14<leader>w\tnote\14<leader>n\rbug_line\15<leader>bb\bbug\14<leader>b\14todo_line\15<leader>tt\ttodo\14<leader>t\15fixme_line\15<leader>ff\18wont_fix_line\15<leader>ww\nfixme\14<leader>f\14note_line\15<leader>nn\nsetup\14commented\frequire\0", "config", "commented.nvim")
 time([[Config for commented.nvim]], false)
--- Config for: tokyonight
-time([[Config for tokyonight]], true)
-try_loadstring("\27LJ\2\n:\0\0\3\0\3\0\0056\0\0\0009\0\1\0'\2\2\0B\0\2\1K\0\1\0\27colorscheme tokyonight\bcmd\bvim\0", "config", "tokyonight")
-time([[Config for tokyonight]], false)
 
 _G._packer.inside_compile = false
 if _G._packer.needs_bufread == true then

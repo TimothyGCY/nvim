@@ -9,6 +9,10 @@ require'nvim-treesitter.configs'.setup {
     additional_vim_regex_highlighting = false,
   },
 
+	autopairs = { enable = true },
+
+	indent = { enable = true },
+
 	context_commentstring = {
 		enable = true,
 		enable_autocmd = true
