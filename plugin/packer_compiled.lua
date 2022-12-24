@@ -104,6 +104,17 @@ _G.packer_plugins = {
     path = "C:\\Users\\USER\\AppData\\Local\\nvim-data\\site\\pack\\packer\\start\\cmp_luasnip",
     url = "https://github.com/saadparwaiz1/cmp_luasnip"
   },
+  ["commented.nvim"] = {
+    config = { "\27LJ\2\nš\2\0\0\4\0\6\0\t6\0\0\0'\2\1\0B\0\2\0029\0\2\0005\2\4\0005\3\3\0=\3\5\2B\0\2\1K\0\1\0\25codetags_keybindings\1\0\0\1\0\n\ttodo\14<leader>t\rwont_fix\14<leader>w\15fixme_line\15<leader>ff\18wont_fix_line\15<leader>ww\nfixme\14<leader>f\14note_line\15<leader>nn\tnote\14<leader>n\rbug_line\15<leader>bb\bbug\14<leader>b\14todo_line\15<leader>tt\nsetup\14commented\frequire\0" },
+    loaded = true,
+    path = "C:\\Users\\USER\\AppData\\Local\\nvim-data\\site\\pack\\packer\\start\\commented.nvim",
+    url = "https://github.com/winston0410/commented.nvim"
+  },
+  ["dart-vim-plugin"] = {
+    loaded = true,
+    path = "C:\\Users\\USER\\AppData\\Local\\nvim-data\\site\\pack\\packer\\start\\dart-vim-plugin",
+    url = "https://github.com/dart-lang/dart-vim-plugin"
+  },
   ["flutter-tools.nvim"] = {
     loaded = true,
     path = "C:\\Users\\USER\\AppData\\Local\\nvim-data\\site\\pack\\packer\\start\\flutter-tools.nvim",
@@ -154,6 +165,11 @@ _G.packer_plugins = {
     path = "C:\\Users\\USER\\AppData\\Local\\nvim-data\\site\\pack\\packer\\start\\nvim-treesitter",
     url = "https://github.com/nvim-treesitter/nvim-treesitter"
   },
+  ["nvim-ts-context-commentstring"] = {
+    loaded = true,
+    path = "C:\\Users\\USER\\AppData\\Local\\nvim-data\\site\\pack\\packer\\start\\nvim-ts-context-commentstring",
+    url = "https://github.com/JoosepAlviste/nvim-ts-context-commentstring"
+  },
   ["packer.nvim"] = {
     loaded = true,
     path = "C:\\Users\\USER\\AppData\\Local\\nvim-data\\site\\pack\\packer\\start\\packer.nvim",
@@ -193,6 +209,10 @@ _G.packer_plugins = {
 }
 
 time([[Defining packer_plugins]], false)
+-- Config for: commented.nvim
+time([[Config for commented.nvim]], true)
+try_loadstring("\27LJ\2\nš\2\0\0\4\0\6\0\t6\0\0\0'\2\1\0B\0\2\0029\0\2\0005\2\4\0005\3\3\0=\3\5\2B\0\2\1K\0\1\0\25codetags_keybindings\1\0\0\1\0\n\ttodo\14<leader>t\rwont_fix\14<leader>w\15fixme_line\15<leader>ff\18wont_fix_line\15<leader>ww\nfixme\14<leader>f\14note_line\15<leader>nn\tnote\14<leader>n\rbug_line\15<leader>bb\bbug\14<leader>b\14todo_line\15<leader>tt\nsetup\14commented\frequire\0", "config", "commented.nvim")
+time([[Config for commented.nvim]], false)
 -- Config for: tokyonight
 time([[Config for tokyonight]], true)
 try_loadstring("\27LJ\2\n:\0\0\3\0\3\0\0056\0\0\0009\0\1\0'\2\2\0B\0\2\1K\0\1\0\27colorscheme tokyonight\bcmd\bvim\0", "config", "tokyonight")
