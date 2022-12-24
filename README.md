@@ -5,8 +5,8 @@
 #### Target Available Language
 | Language |Status |
 | - | - |
-| Java | ✅ |
-| Kotlin | ✅ |
+| Java | ❎ |
+| Kotlin | ❎ |
 | Swift | ❎ |
 | Objective-C | ❎ |
 | Javascript | ✅ |
