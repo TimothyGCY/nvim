@@ -105,7 +105,7 @@ _G.packer_plugins = {
     url = "https://github.com/saadparwaiz1/cmp_luasnip"
   },
   ["commented.nvim"] = {
-    config = { "\27LJ\2\nš\2\0\0\4\0\6\0\t6\0\0\0'\2\1\0B\0\2\0029\0\2\0005\2\4\0005\3\3\0=\3\5\2B\0\2\1K\0\1\0\25codetags_keybindings\1\0\0\1\0\n\rwont_fix\14<leader>w\tnote\14<leader>n\rbug_line\15<leader>bb\bbug\14<leader>b\14todo_line\15<leader>tt\ttodo\14<leader>t\15fixme_line\15<leader>ff\18wont_fix_line\15<leader>ww\nfixme\14<leader>f\14note_line\15<leader>nn\nsetup\14commented\frequire\0" },
+    config = { "\27LJ\2\nš\2\0\0\4\0\6\0\t6\0\0\0'\2\1\0B\0\2\0029\0\2\0005\2\4\0005\3\3\0=\3\5\2B\0\2\1K\0\1\0\25codetags_keybindings\1\0\0\1\0\n\rwont_fix\14<leader>w\14todo_line\15<leader>tt\18wont_fix_line\15<leader>ww\ttodo\14<leader>t\15fixme_line\15<leader>ff\nfixme\14<leader>f\14note_line\15<leader>nn\tnote\14<leader>n\rbug_line\15<leader>bb\bbug\14<leader>b\nsetup\14commented\frequire\0" },
     loaded = true,
     path = "C:\\Users\\USER\\AppData\\Local\\nvim-data\\site\\pack\\packer\\start\\commented.nvim",
     url = "https://github.com/winston0410/commented.nvim"
@@ -124,6 +124,16 @@ _G.packer_plugins = {
     loaded = true,
     path = "C:\\Users\\USER\\AppData\\Local\\nvim-data\\site\\pack\\packer\\start\\friendly-snippets",
     url = "https://github.com/rafamadriz/friendly-snippets"
+  },
+  ["github-nvim-theme"] = {
+    loaded = true,
+    path = "C:\\Users\\USER\\AppData\\Local\\nvim-data\\site\\pack\\packer\\start\\github-nvim-theme",
+    url = "https://github.com/projekt0n/github-nvim-theme"
+  },
+  ["gitsigns.nvim"] = {
+    loaded = true,
+    path = "C:\\Users\\USER\\AppData\\Local\\nvim-data\\site\\pack\\packer\\start\\gitsigns.nvim",
+    url = "https://github.com/lewis6991/gitsigns.nvim"
   },
   ["lsp-zero.nvim"] = {
     loaded = true,
@@ -209,13 +219,18 @@ _G.packer_plugins = {
     loaded = true,
     path = "C:\\Users\\USER\\AppData\\Local\\nvim-data\\site\\pack\\packer\\start\\undotree",
     url = "https://github.com/mbbill/undotree"
+  },
+  ["vim-fugitive"] = {
+    loaded = true,
+    path = "C:\\Users\\USER\\AppData\\Local\\nvim-data\\site\\pack\\packer\\start\\vim-fugitive",
+    url = "https://github.com/tpope/vim-fugitive"
   }
 }
 
 time([[Defining packer_plugins]], false)
 -- Config for: commented.nvim
 time([[Config for commented.nvim]], true)
-try_loadstring("\27LJ\2\nš\2\0\0\4\0\6\0\t6\0\0\0'\2\1\0B\0\2\0029\0\2\0005\2\4\0005\3\3\0=\3\5\2B\0\2\1K\0\1\0\25codetags_keybindings\1\0\0\1\0\n\rwont_fix\14<leader>w\tnote\14<leader>n\rbug_line\15<leader>bb\bbug\14<leader>b\14todo_line\15<leader>tt\ttodo\14<leader>t\15fixme_line\15<leader>ff\18wont_fix_line\15<leader>ww\nfixme\14<leader>f\14note_line\15<leader>nn\nsetup\14commented\frequire\0", "config", "commented.nvim")
+try_loadstring("\27LJ\2\nš\2\0\0\4\0\6\0\t6\0\0\0'\2\1\0B\0\2\0029\0\2\0005\2\4\0005\3\3\0=\3\5\2B\0\2\1K\0\1\0\25codetags_keybindings\1\0\0\1\0\n\rwont_fix\14<leader>w\14todo_line\15<leader>tt\18wont_fix_line\15<leader>ww\ttodo\14<leader>t\15fixme_line\15<leader>ff\nfixme\14<leader>f\14note_line\15<leader>nn\tnote\14<leader>n\rbug_line\15<leader>bb\bbug\14<leader>b\nsetup\14commented\frequire\0", "config", "commented.nvim")
 time([[Config for commented.nvim]], false)
 
 _G._packer.inside_compile = false

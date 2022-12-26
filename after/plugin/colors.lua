@@ -5,9 +5,9 @@ end
 
 function ChangeTheme(color)
 	color = color or 'default'
-	theme = string.format('colorscheme %s', color)
+	local theme = string.format('colorscheme %s', color)
 	vim.cmd(theme)
 end
 
-ChangeTheme()
+ChangeTheme('github_dark_default')
 TransparentBG()
