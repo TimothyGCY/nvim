@@ -10,6 +10,32 @@ lsp.ensure_installed({
 	'rust_analyzer'
 })
 
+local augroup_format = vim.api.nvim_create_augroup("Format", { clear = true })
+
+local enable_format_on_save = function(_, bufnr)
+	vim.api.nvim_clear_autocmds({ group = augroup_format, buffer = bufnr })
+	vim.api.nvim_create_autocmd("BufWritePre", {
+		group = augroup_format,
+		buffer = bufnr,
+		callback = function()
+			vim.lsp.buf.format({ bufnr = bufnr })
+		end,
+	})
+end
+
+local on_attach = function (_, bufnr)
+	local function buf_set_keymap(...)
+		vim.api.nvim_buf_set_keymap(bufnr, ...)
+	end
+
+	local opts = { noremap = true, silent = true }
+
+	buf_set_keymap('n', 'gD', '<Cmd>lua vim.lsp.buf.declaration()<CR>', opts)
+	buf_set_keymap('n', 'gi', '<Cmd>lua vim.lsp.buf.implementation()<CR>', opts)
+end
+
+local capabilities = require('cmp_nvim_lsp').default_capabilities()
+
 -- Fix Undefined global 'vim'
 lsp.configure('sumneko_lua', {
 	settings = {
@@ -18,7 +44,20 @@ lsp.configure('sumneko_lua', {
 				globals = { 'vim' }
 			}
 		}
-	}
+	},
+	on_attach = function (client, bufnr)
+		on_attach(client, bufnr)
+		enable_format_on_save(client, bufnr)
+	end
+})
+
+lsp.configure('tsserver', {
+	on_attach = function (client, bufnr)
+		on_attach(client, bufnr)
+	end,
+	filetypes = { 'typescript', 'typescriptreact', 'typescript.tsx' },
+	-- cmd = { 'typescript-language-server', '--stdio' },
+	capabilities = capabilities
 })
 
 local cmp = require('cmp')
@@ -51,14 +90,14 @@ lsp.setup_nvim_cmp({
 	mapping = cmp_mappings
 })
 
-lsp.on_attach(function(client, bufnr)
-	-- local opts = {buffer = bufnr, remap = false}
-
-	if client.name == 'eslint' then
-		vim.cmd.LspStop('eslint')
-		return
-	end
-end)
+-- lsp.on_attach(function(client, bufnr)
+-- 	-- local opts = {buffer = bufnr, remap = false}
+-- 
+-- 	if client.name == 'eslint' then
+-- 		vim.cmd.LspStop('eslint')
+-- 		return
+-- 	end
+-- end)
 
 lsp.setup()
 
