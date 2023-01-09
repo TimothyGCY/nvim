@@ -21,3 +21,7 @@ vim.keymap.set('n', 'dw', 'vb"_d')
 -- Select all
 vim.keymap.set('n', '<C-a>', 'gg<S-v>G')
 
+
+vim.keymap.set('n', 'K', '<Cmd> lua vim.lsp.buf.hover()<CR>', {})
+vim.keymap.set('n', 'gd', '<Cmd> lua vim.lsp.buf.definition()<CR>', {})
+

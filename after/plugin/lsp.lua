@@ -1,4 +1,5 @@
-local lsp = require('lsp-zero')
+local status, lsp = pcall(require, 'lsp-zero')
+if not status then return end
 
 lsp.preset('recommended')
 
@@ -7,7 +8,8 @@ lsp.ensure_installed({
 	'tsserver',
 	'eslint',
 	'sumneko_lua',
-	'rust_analyzer'
+	'rust_analyzer',
+	'gopls'
 })
 
 local augroup_format = vim.api.nvim_create_augroup("Format", { clear = true })
@@ -56,7 +58,6 @@ lsp.configure('tsserver', {
 		on_attach(client, bufnr)
 	end,
 	filetypes = { 'typescript', 'typescriptreact', 'typescript.tsx' },
-	-- cmd = { 'typescript-language-server', '--stdio' },
 	capabilities = capabilities
 })
 
@@ -89,15 +90,6 @@ lsp.set_preferences({
 lsp.setup_nvim_cmp({
 	mapping = cmp_mappings
 })
-
--- lsp.on_attach(function(client, bufnr)
--- 	-- local opts = {buffer = bufnr, remap = false}
--- 
--- 	if client.name == 'eslint' then
--- 		vim.cmd.LspStop('eslint')
--- 		return
--- 	end
--- end)
 
 lsp.setup()
 

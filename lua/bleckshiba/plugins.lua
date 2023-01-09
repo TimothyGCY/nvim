@@ -44,6 +44,7 @@ return require('packer').startup(
 			}
 		}
 		use 'windwp/nvim-autopairs'
+		use 'windwp/nvim-ts-autotag'
 
 		use {
 			'akinsho/flutter-tools.nvim',
@@ -58,25 +59,7 @@ return require('packer').startup(
 
 		use 'mfussenegger/nvim-jdtls'
 
-		use({
-			'winston0410/commented.nvim',
-			config = function()
-				require('commented').setup({
-					codetags_keybindings = {
-						fixme         = '<leader>f',
-						fixme_line    = '<leader>ff',
-						todo          = '<leader>t',
-						todo_line     = '<leader>tt',
-						bug           = '<leader>b',
-						bug_line      = '<leader>bb',
-						note          = '<leader>n',
-						note_line     = '<leader>nn',
-						wont_fix      = '<leader>w',
-						wont_fix_line = '<leader>ww',
-					}
-				})
-			end
-		})
+		use 'numToStr/Comment.nvim'
 
 		-- Git
 		use 'lewis6991/gitsigns.nvim'
