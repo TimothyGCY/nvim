@@ -46,6 +46,7 @@ return require('packer').startup(
 		use 'windwp/nvim-autopairs'
 		use 'windwp/nvim-ts-autotag'
 
+		use 'akinsho/nvim-bufferline.lua'
 		use {
 			'akinsho/flutter-tools.nvim',
 			requires = 'nvim-lua/plenary.nvim'
@@ -60,6 +61,8 @@ return require('packer').startup(
 		use 'mfussenegger/nvim-jdtls'
 
 		use 'numToStr/Comment.nvim'
+
+		use 'norcalli/nvim-colorizer.lua'
 
 		-- Git
 		use 'lewis6991/gitsigns.nvim'
