@@ -22,6 +22,7 @@ vim.opt.wrap = false
 vim.opt.backspace = { 'start', 'eol', 'indent' }
 vim.opt.path:append { '**' }
 vim.opt.wildignore:append { '*/node_modules/' }
+vim.opt.mouse = 'a'
 
 vim.opt.formatoptions:append { 'r' }
 
