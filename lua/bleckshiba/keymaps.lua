@@ -24,4 +24,6 @@ vim.keymap.set('n', '<C-a>', 'gg<S-v>G')
 
 vim.keymap.set('n', 'K', '<Cmd> lua vim.lsp.buf.hover()<CR>', {})
 vim.keymap.set('n', 'gd', '<Cmd> tab split | lua vim.lsp.buf.definition()<CR>', {})
+vim.keymap.set('n', 'ca', '<Cmd> lua vim.lsp.buf.code_action()<CR>', {})
+vim.keymap.set('n', 'fm', '<cmd>lua vim.lsp.buf.format()<CR>', {})
 

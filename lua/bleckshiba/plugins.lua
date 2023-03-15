@@ -12,6 +12,7 @@ return require('packer').startup(
 
 		use 'folke/tokyonight.nvim'
 		use 'projekt0n/github-nvim-theme'
+		use 'lunarvim/synthwave84.nvim'
 
 		use(
 			'nvim-treesitter/nvim-treesitter',

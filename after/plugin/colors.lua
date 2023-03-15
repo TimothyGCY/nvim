@@ -9,5 +9,5 @@ function ChangeTheme(color)
 	vim.cmd(theme)
 end
 
--- ChangeTheme('github_dark_colorblind')
+ChangeTheme('synthwave84')
 -- TransparentBG()

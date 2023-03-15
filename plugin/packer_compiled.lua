@@ -219,6 +219,11 @@ _G.packer_plugins = {
     path = "C:\\Users\\USER\\AppData\\Local\\nvim-data\\site\\pack\\packer\\start\\presence.nvim",
     url = "https://github.com/andweeb/presence.nvim"
   },
+  ["synthwave84.nvim"] = {
+    loaded = true,
+    path = "C:\\Users\\USER\\AppData\\Local\\nvim-data\\site\\pack\\packer\\start\\synthwave84.nvim",
+    url = "https://github.com/lunarvim/synthwave84.nvim"
+  },
   ["telescope-file-browser.nvim"] = {
     loaded = true,
     path = "C:\\Users\\USER\\AppData\\Local\\nvim-data\\site\\pack\\packer\\start\\telescope-file-browser.nvim",
