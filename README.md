@@ -5,13 +5,16 @@
 #### Target Available Language
 | Language |Status |
 | - | - |
-| Java | WIP |
-| Kotlin | WIP |
+| Java | ✅ |
+| Kotlin | ❎ |
 | Swift | ❎ |
 | Objective-C | ❎ |
 | Javascript | ✅ |
 | TypeScript | ✅ |
 | Flutter | ✅ |
+
+> JDK 17 is required for Java setup
+
 
 ---
 
