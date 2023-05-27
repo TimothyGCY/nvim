@@ -7,7 +7,7 @@ lsp.ensure_installed({
 	'jdtls',
 	'tsserver',
 	'eslint',
-	'sumneko_lua',
+	'lua_ls',
 	'rust_analyzer',
 	'gopls'
 })
@@ -39,7 +39,7 @@ end
 local capabilities = require('cmp_nvim_lsp').default_capabilities()
 
 -- Fix Undefined global 'vim'
-lsp.configure('sumneko_lua', {
+lsp.configure('lua_ls', {
 	settings = {
 		Lua = {
 			diagnostics = {
@@ -59,6 +59,28 @@ lsp.configure('tsserver', {
 	end,
 	filetypes = { 'typescript', 'typescriptreact', 'typescript.tsx' },
 	capabilities = capabilities
+})
+
+lsp.configure('jdtls', {
+	cmd = {
+		'jdtls-win.cmd',
+		'-configuration',
+		'/Users/USER/AppData/Local/nvim-data/mason/packages/jdtls/config_win/',
+		'-jar',
+		'/Users/USER/AppData/Local/nvim-data/mason/packages/jdtls/plugins/org.eclipse.equinox.launcher_1.6.400.v20210924-0641.jar',
+		'-data',
+		'E:\\devenv\\Java',
+	},
+
+	root_dir = function()
+		return vim.fs.dirname(vim.fs.find({ '.gradlew', '.git', 'mvnw', 'build.gradle', 'pom.xml' }, { upward = true })[1])
+	end,
+
+	flags = { debounce_text_changes = 150 },
+
+	on_attach = function (client, bufnr)
+		on_attach(client, bufnr)
+	end,
 })
 
 local cmp = require('cmp')
