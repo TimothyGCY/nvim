@@ -24,6 +24,10 @@ tools.setup({
 			completeFuntionCalls = true,
 			enableSnippets = true,
 		},
+		on_attach = function(client, bufnr)
+			print('flutter lsp attached')
+			vim.cmd('DartToggleFormatOnSave<CR>')
+		end,
 	},
 
 })
