@@ -63,8 +63,6 @@ return require('packer').startup(
 
 		use 'numToStr/Comment.nvim'
 
-		use 'norcalli/nvim-colorizer.lua'
-
 		-- Git
 		use 'lewis6991/gitsigns.nvim'
 		use 'tpope/vim-fugitive'
