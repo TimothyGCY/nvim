@@ -1,1 +1,0 @@
--- vim.keymap.set('n', 'hh', vim.cmd.UndotreeToggle)
