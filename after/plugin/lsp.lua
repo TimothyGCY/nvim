@@ -61,28 +61,6 @@ lsp.configure('tsserver', {
 	capabilities = capabilities
 })
 
-lsp.configure('jdtls', {
-	cmd = {
-		'jdtls-win.cmd',
-		'-configuration',
-		'/Users/USER/AppData/Local/nvim-data/mason/packages/jdtls/config_win/',
-		'-jar',
-		'/Users/USER/AppData/Local/nvim-data/mason/packages/jdtls/plugins/org.eclipse.equinox.launcher_1.6.400.v20210924-0641.jar',
-		'-data',
-		'E:\\devenv\\Java',
-	},
-
-	root_dir = function()
-		return vim.fs.dirname(vim.fs.find({ '.gradlew', '.git', 'mvnw', 'build.gradle', 'pom.xml' }, { upward = true })[1])
-	end,
-
-	flags = { debounce_text_changes = 150 },
-
-	on_attach = function (client, bufnr)
-		on_attach(client, bufnr)
-	end,
-})
-
 local cmp = require('cmp')
 local cmp_select = { behavior = cmp.SelectBehavior.Select }
 local cmp_mappings = lsp.defaults.cmp_mappings({
