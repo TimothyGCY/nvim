@@ -1,6 +1,7 @@
 return {
 	{
 		'windwp/nvim-autopairs',
+		event = 'InsertEnter',
 		config = function()
 			local autopair = require('nvim-autopairs')
 			autopair.setup({
@@ -10,9 +11,7 @@ return {
 	},
 	{
 		'windwp/nvim-ts-autotag',
-		config = function()
-			local autotag = require('nvim-ts-autotag')
-			autotag.setup({})
-		end,
+		event = 'InsertEnter',
+		config = true,
 	},
 }
