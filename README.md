@@ -1,23 +1,11 @@
 # My NVIM Configuration from Scratch
 
-> Configuration inspired by Craftzdog & ThePrimeagen
+> Modified from `main` branch, by migrating to `Lazy Nvim`
 
-#### Target Available Language
+#### Available Language
 | Language |Status |
 | - | - |
-| Java | ✅ |
-| Kotlin | ❎ |
-| Swift | ❎ |
-| Objective-C | ❎ |
 | Javascript | ✅ |
 | TypeScript | ✅ |
 | Flutter | ✅ |
 
-> JDK 17 is required for Java setup
-
-
----
-
-### References
-1. [ThePrimeagen](https://www.youtube.com/watch?v=w7i4amO_zaE&t=850s)
-2. [Craftzdog](https://github.com/craftzdog/dotfiles-public)
