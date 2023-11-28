@@ -1,29 +1,40 @@
+local keymap = vim.keymap
+local opts = { noremap = true, silent = true }
+
 -- Split windows
-vim.keymap.set('n', 'ss', ':split<Return><C-w>w')
-vim.keymap.set('n', 'sv', ':vsplit<Return><C-w>w')
+keymap.set('n', 'ss', ':split<Return>', opts)
+keymap.set('n', 'sv', ':vsplit<Return>', opts)
+
+-- New tab
+keymap.set('n', 'te', ':tabedit<Return>', opts)
+keymap.set('n', '<tab>', ':tabnext<Return>', opts)
+keymap.set('n', '<s-tab>', ':tabprev<Return>', opts)
 
 -- Navigate window
-vim.keymap.set('n', '<Space>', '<C-w>w')
-vim.keymap.set('n', '<C-left>', '<C-w>h')
-vim.keymap.set('n', '<C-right>', '<C-w>l')
-vim.keymap.set('n', '<C-up>', '<C-w>k')
-vim.keymap.set('n', '<C-down>', '<C-w>j')
+keymap.set('n', '<Space>', '<C-w>w')
+keymap.set('n', '<C-left>', '<C-w>h')
+keymap.set('n', '<C-right>', '<C-w>l')
+keymap.set('n', '<C-up>', '<C-w>k')
+keymap.set('n', '<C-down>', '<C-w>j')
 
 -- Resize windows
-vim.keymap.set('n', '<A-left>', '<C-w><')
-vim.keymap.set('n', '<A-right>', '<C-w>>')
-vim.keymap.set('n', '<A-up>', '<C-w>+')
-vim.keymap.set('n', '<A-down>', '<C-w>-')
+keymap.set('n', '<A-left>', '<C-w><')
+keymap.set('n', '<A-right>', '<C-w>>')
+keymap.set('n', '<A-up>', '<C-w>+')
+keymap.set('n', '<A-down>', '<C-w>-')
 
 -- Delete a word
-vim.keymap.set('n', 'dw', 'vb"_d')
+keymap.set('n', 'dw', 'vb"_d')
 
 -- Select all
-vim.keymap.set('n', '<C-a>', 'gg<S-v>G')
+keymap.set('n', '<C-a>', 'gg<S-v>G')
 
+-- Diagnostic
+keymap.set('n', '<C-j>', function()
+	vim.diagnostic.goto_next()
+end, opts)
 
-vim.keymap.set('n', 'K', '<Cmd> lua vim.lsp.buf.hover()<CR>', {})
-vim.keymap.set('n', 'gd', '<Cmd> tab split | lua vim.lsp.buf.definition()<CR>', {})
-vim.keymap.set('n', 'ca', '<Cmd> lua vim.lsp.buf.code_action()<CR>', {})
-vim.keymap.set('n', 'fm', '<cmd>lua vim.lsp.buf.format()<CR>', {})
-
+keymap.set('n', 'K', '<Cmd> lua vim.lsp.buf.hover()<CR>', opts)
+keymap.set('n', 'gd', '<Cmd> tab split | lua vim.lsp.buf.definition()<CR>', opts)
+keymap.set('n', 'ca', '<Cmd> lua vim.lsp.buf.code_action()<CR>', opts)
+keymap.set('n', 'fm', '<cmd>lua vim.lsp.buf.format()<CR>', opts)
