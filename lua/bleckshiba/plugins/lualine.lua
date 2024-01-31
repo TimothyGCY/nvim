@@ -42,7 +42,8 @@ return {
 
 		lualine.setup({
 			options = {
-				theme = theme,
+				-- theme = theme,
+        theme = 'tokyonight-day',
 			},
 			sections = {
 				lualine_x = {

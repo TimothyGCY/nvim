@@ -7,6 +7,7 @@ keymap.set('n', 'sv', ':vsplit<Return>', opts)
 
 -- New tab
 keymap.set('n', 'te', ':tabedit<Return>', opts)
+keymap.set('n', 'tn', ':tabnew<Return>', opts)
 keymap.set('n', '<tab>', ':tabnext<Return>', opts)
 keymap.set('n', '<s-tab>', ':tabprev<Return>', opts)
 

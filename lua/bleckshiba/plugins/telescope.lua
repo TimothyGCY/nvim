@@ -10,15 +10,22 @@ return {
 			if not status then return end
 
 			-- telescope.load_extension('fzf')
+      telescope.load_extension('flutter')
 
 			local builtin = require('telescope.builtin')
 			local actions = require('telescope.actions')
 
 			vim.keymap.set('n', 'ff', builtin.find_files, {})
-			vim.keymap.set('n', 'gf', builtin.git_files, {})
 			vim.keymap.set('n', '<C-F>', function()
 				builtin.grep_string({ search = vim.fn.input("grep > ") })
 			end)
+
+      -- Git related
+      vim.keymap.set('n', '<leader>gs', builtin.git_status, {})
+      vim.keymap.set('n', '<leader>gc', builtin.git_commits, {})
+
+      -- Flutter commands
+      vim.keymap.set('n', '<leader>fc', ':Telescope flutter commands<Return>', {})
 
 			-- Telescope with File Browser extension
 			local function telescope_buffer_dir()
