@@ -15,9 +15,9 @@ return {
 		local root_dir = require('jdtls.setup').find_root(root_markers)
 		if root_dir == "" then return end
 
-		local project_name = vim.fn.fnamemodify(vim.fn.getcwd(), ':p:h:t')
+		local project_name = vim.fn.fnamemodify(vim.loop.cwd(), ':p:h:t')
 		local workspace_dir = vim.fn.stdpath('data') .. '/site/java/workspace_root/' .. project_name
-		os.execute("mkdir", workspace_dir)
+		os.execute("mkdir" .. workspace_dir)
 
 		local config = {
 			cmd = {

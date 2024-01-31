@@ -8,4 +8,5 @@
 | Javascript | ✅ |
 | TypeScript | ✅ |
 | Flutter | ✅ |
+| Java | ✅ |
 

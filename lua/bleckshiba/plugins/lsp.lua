@@ -32,7 +32,8 @@ return {
 				'eslint',
 				'lua_ls',
 				'rust_analyzer',
-				'gopls'
+				'gopls',
+        -- 'kotlin-language-server',
 			},
 			handlers = {
 				lsp.default_setup,

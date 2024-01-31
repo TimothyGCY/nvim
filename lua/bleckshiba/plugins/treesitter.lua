@@ -7,13 +7,9 @@ return {
     'nvim-treesitter/nvim-treesitter',
     opts = {
       ensure_installed = {
-        'astro',
-        'cmake',
-        'cpp',
         'css',
         'gitignore',
         'go',
-        'graphql',
         'http',
         'java',
         'json',
@@ -48,22 +44,6 @@ return {
     },
     config = function(_, opts)
       require 'nvim-treesitter.configs'.setup(opts)
-      -- {
-      -- 	ensure_installed = { 'javascript', 'typescript', 'lua', 'c', 'java', 'css', 'html' },
-      -- 	sync_install = false,
-      -- 	auto_install = true,
-
-      -- 	highlight = {
-      -- 		enable = false,
-      -- 		additional_vim_regex_highlighting = false,
-      -- 	},
-
-      -- 	autopairs = { enable = true },
-
-      -- 	indent = { enable = true },
-
-      -- 	context_commentstring = { enable = true, enable_autocmd = true },
-      -- }
 
       vim.filetype.add({
         extension = { mdx = 'mdx' },
