@@ -68,4 +68,5 @@ return {
       vim.cmd([[colorscheme tokyonight-day]])
     end,
   },
+  { 'ryanoasis/vim-devicons' }
 }

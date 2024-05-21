@@ -28,6 +28,7 @@ vim.opt.wildignore:append({ '*/node_modules/' })
 vim.opt.mouse = 'a'
 vim.opt.splitbelow = true
 vim.opt.splitright = true
+vim.opt.fileformat = 'unix'
 
 vim.opt.formatoptions:append { 'r' }
 
