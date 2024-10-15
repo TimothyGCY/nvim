@@ -28,11 +28,10 @@ return {
 		require('mason-lspconfig').setup({
 			ensure_installed = {
 				'jdtls',
-				'tsserver',
+				'ts_ls',
 				'eslint',
 				'lua_ls',
 				'rust_analyzer',
-				'gopls',
         -- 'kotlin-language-server',
 			},
 			handlers = {
@@ -85,7 +84,7 @@ return {
 			end
 		})
 
-		lsp.configure('tsserver', {
+		lsp.configure('ts_ls', {
 			on_attach = function(client, bufnr)
 				on_attach(client, bufnr)
 			end,
