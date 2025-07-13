@@ -35,8 +35,10 @@ keymap.set('n', '<C-j>', function()
   vim.diagnostic.goto_next()
 end, opts)
 
-keymap.set('n', 'K', '<Cmd> lua vim.lsp.buf.hover()<CR>', opts)
-keymap.set('n', 'gd', '<Cmd> tab split | lua vim.lsp.buf.definition()<CR>', opts)
+keymap.set('n', 'K', '<cmd> lua vim.lsp.buf.hover()<CR>', opts)
+keymap.set('n', 'gd', '<cmd> tab split | lua vim.lsp.buf.definition()<CR>', opts)
 keymap.set('n', 'gr', '<cmd> lua vim.lsp.buf.references()<CR>', opts)
-keymap.set('n', 'ca', '<Cmd> lua vim.lsp.buf.code_action()<CR>', opts)
+keymap.set('n', 'ca', '<cmd> lua vim.lsp.buf.code_action()<CR>', opts)
 keymap.set('n', 'fm', '<cmd>lua vim.lsp.buf.format()<CR>', opts)
+
+keymap.set('n', '<leader>gb', '<cmd>BlamerShow<CR>', opts)

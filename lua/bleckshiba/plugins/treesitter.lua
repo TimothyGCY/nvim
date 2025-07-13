@@ -15,6 +15,7 @@ return {
         'json',
         'rust',
         'sql',
+        'dart',
       },
       query_linter = {
         enable = true,
@@ -51,3 +52,4 @@ return {
     end
   },
 }
+

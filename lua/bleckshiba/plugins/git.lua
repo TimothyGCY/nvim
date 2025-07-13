@@ -3,6 +3,6 @@ return {
     'tpope/vim-fugitive',
   },
   {
-    'APZelos/blamer.nvim',
+    'TimothyGCY/blamer.nvim',
   },
 }

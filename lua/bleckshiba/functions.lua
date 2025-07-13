@@ -4,5 +4,5 @@ function ReplaceAll()
 	vim.cmd("%s/" .. vim.fn.escape(target, '/') .. "/" .. vim.fn.escape(replacement, '/') .. "/g")
 end
 
-vim.api.nvim_set_keymap('n', 'ra', '<cmd>lua ReplaceAll()<CR>', { noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', '<leader>ra', '<cmd>lua ReplaceAll()<CR>', { noremap = true, silent = true })
 
