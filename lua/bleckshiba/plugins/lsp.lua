@@ -87,25 +87,16 @@ return {
 
     require('mason').setup()
     require('mason-lspconfig').setup({
-      ensure_installed = {
-        'lua_ls', 'eslint', 'ts_ls'
-      },
-      handlers = {
-        function(server_name)
-          require('lspconfig')[server_name].setup({})
-        end,
+      ensure_installed = { 'lua_ls', 'eslint', 'ts_ls' },
+    })
 
-        lua_ls = function()
-          require('lspconfig').lua_ls.setup({
-            settings = {
-              Lua = {
-                runtime = { version = 'LuatJIT' },
-                diagnostics = { globals = { 'vim' } },
-                workspace = { library = { vim.env.VIMRUNTIME } }
-              }
-            }
-          })
-        end,
+    vim.lsp.config('lua_ls', {
+      settings = {
+        Lua = {
+          runtime = { version = 'LuatJIT' },
+          diagnostics = { globals = { 'vim' } },
+          workspace = { library = { vim.env.VIMRUNTIME } }
+        }
       }
     })
 
@@ -199,4 +190,3 @@ return {
     })
   end,
 }
-
