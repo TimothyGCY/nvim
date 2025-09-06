@@ -3,7 +3,26 @@ return {
   dependencies = {
     -- LSP Support
     'williamboman/mason.nvim',
-    'williamboman/mason-lspconfig.nvim',
+    {
+      'williamboman/mason-lspconfig.nvim',
+      opts = {
+        automatic_enable = {
+          exclude = { 'jdtls' }
+        }
+      }
+    },
+
+    {
+      "folke/lazydev.nvim",
+      ft = "lua", -- only load on lua files
+      opts = {
+        library = {
+          -- See the configuration section for more details
+          -- Load luvit types when the `vim.uv` word is found
+          { path = "${3rd}/luv/library", words = { "vim%.uv" } },
+        },
+      },
+    },
 
     -- Autocomplete
     'hrsh7th/nvim-cmp',
@@ -16,9 +35,18 @@ return {
     -- Code Snippets
     'L3MON4D3/LuaSnip',
     'rafamadriz/friendly-snippets',
+
+    'mfussenegger/nvim-jdtls',
   },
   config = function()
+    vim.lsp.enable('jdtls')
     local autoformat_filetypes = { 'lua' }
+    -- vim.api.nvim_create_autocmd('FileType', {
+    --   pattern = 'java',
+    --   callback = function(args)
+    --     require 'jdtls.jdtls_setup'.setup()
+    --   end
+    -- })
     vim.api.nvim_create_autocmd('LSPAttach', {
       callback = function(args)
         local client = vim.lsp.get_client_by_id(args.data.client_id)
@@ -68,35 +96,32 @@ return {
       require('cmp_nvim_lsp').default_capabilities()
     )
 
-    vim.api.nvim_create_autocmd('LSPAttach', {
-      callback = function(event)
-        local opts = { buffer = event.buf }
-        vim.keymap.set('n', 'K', "<cmd>lua vim.lsp.buf.hover({ border = 'rounded' })<cr>", opts)
-        vim.keymap.set('n', 'gd', '<cmd>tab split | lua vim.lsp.buf.definition()<cr>', opts)
-        vim.keymap.set('n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<cr>', opts)
-        vim.keymap.set('n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<cr>', opts)
-        vim.keymap.set('n', 'go', '<cmd>lua vim.lsp.buf.type_definition()<cr>', opts)
-        vim.keymap.set('n', 'gr', '<cmd>lua vim.lsp.buf.references()<cr>', opts)
-        vim.keymap.set('n', 'gs', "<cmd>lua vim.lsp.buf.signature_help({ border = 'rounded' })<cr>", opts)
-        vim.keymap.set('n', 'gl', '<cmd>lua vim.diagnostic.open_float()<cr>', opts)
-        vim.keymap.set('n', '<F2>', '<cmd>lua vim.lsp.buf.rename()<cr>', opts)
-        vim.keymap.set('n', 'fm', '<cmd>lua vim.lsp.buf.format({async = true})<cr>', opts)
-        vim.keymap.set('n', '<F4>', '<cmd>lua vim.lsp.buf.code_action()<cr>', opts)
-      end
-    })
-
     require('mason').setup()
-    require('mason-lspconfig').setup({
-      ensure_installed = { 'lua_ls', 'eslint', 'ts_ls' },
-    })
 
-    vim.lsp.config('lua_ls', {
-      settings = {
-        Lua = {
-          runtime = { version = 'LuatJIT' },
-          diagnostics = { globals = { 'vim' } },
-          workspace = { library = { vim.env.VIMRUNTIME } }
-        }
+    require('mason-lspconfig').setup({
+      ensure_installed = {
+        'lua_ls', 'eslint', 'ts_ls'
+      },
+      automatic_installation = true,
+      handlers = {
+        function(server_name)
+          print('setup server: ' .. server_name)
+          if server_name == 'jdtls' then return end
+          require('lspconfig')[server_name].setup({})
+        end,
+
+        lua_ls = function()
+          require('lspconfig').lua_ls.setup({
+            -- settings = {
+            --   Lua = {
+            --     runtime = { version = 'LuatJIT' },
+            --     diagnostics = { globals = { 'vim' } },
+            --     workspace = { library = { vim.env.VIMRUNTIME } }
+            --   }
+            -- }
+          })
+        end,
+        jdtls = function() end
       }
     })
 
