@@ -24,9 +24,11 @@ return {
         builtin.find_files({ hidden = true })
       end, {})
       vim.keymap.set('n', '<C-f>', function()
-        -- builtin.grep_string({ search = vim.fn.input("grep > ") })
         builtin.live_grep()
       end, { desc = "Live Grep" })
+      vim.keymap.set('n', '<leader><C-f>', function()
+        builtin.grep_string({ search = vim.fn.input("grep > ") })
+      end, { desc = 'Grep' })
 
       -- Git related
       vim.keymap.set('n', '<leader>gs', builtin.git_status, {})
