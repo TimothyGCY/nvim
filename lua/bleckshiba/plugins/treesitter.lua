@@ -1,19 +1,64 @@
+local treesitter = require "vim.treesitter"
 return {
   {
     'nvim-treesitter/playground',
-    -- cmd = "TSPlaygroundToggle",
+    cmd = "TSPlaygroundToggle",
     lazy = true,
   },
   {
     'nvim-treesitter/nvim-treesitter',
+    lazy = false,
+    commit = "90cd658",
+    main = "nvim-treesitter",
+    event = { "BufReadPost", "BufNewFile" },
+    init = function()
+      local highlight = function(bufnr, lang)
+        if not vim.treesitter.language.add(lang) then return end
+        vim.treesitter.start(bufnr)
+      end
+
+      vim.api.nvim_create_autocmd('FileType', {
+        callback = function(args)
+          local ft = vim.bo.filetype
+          local bt = vim.bo.buftype
+          local buf = args.buf
+
+          if bt ~= "" then return end
+
+          local ok, _ = pcall(require, 'nvim-treesitter')
+          if not ok then return end
+
+          vim.schedule(function()
+            if vim.fn.mode() ~= "t" then
+              vim.cmd "silent! normal! zx"
+            end
+          end)
+
+          if not vim.tbl_contains({ "python", "html", "yaml", "markdown" }, ft) then
+            vim.bo.indentexpr = "v:lua.require('nvim-treesitter').indentexpr()"
+          end
+
+          if vim.fn.executable "tree-sitter" ~= 1 then
+            return false
+          end
+
+          if not vim.treesitter.language.get_lang(ft) then return end
+
+          if vim.list_contains(treesitter.get_installed(), ft) then
+            highlight(buf, ft)
+          elseif vim.list_contains(treesitter.get_available(), ft) then
+            treesitter.install(ft):await(function()
+              highlight(buf, ft)
+            end)
+          end
+        end
+      })
+    end,
     opts = {
       ensure_installed = {
-        'gitignore',
         'go',
-        'http',
         'java',
         'json',
-        'rust',
         'sql',
         'dart',
       },
@@ -42,14 +87,22 @@ return {
       },
     },
     config = function(_, opts)
-      require 'nvim-treesitter.configs'.setup(opts)
+      local ok, ts = pcall(require, 'nvim-treesitter')
+      if not ok then
+        return
+      end
 
-      vim.filetype.add({
-        extension = { mdx = 'mdx' },
-      })
-
-      vim.treesitter.language.register('markdown', 'mdx')
+      ts.setup(opts)
+      if vim.fn.executable "tree-sitter" ~= 1 then
+        vim.api.nvim_echo({
+          {
+            'tree-sitter CLI not found. Parsers cannot be installed.',
+            'ErrorMsg',
+          }
+        }, true, {})
+        return false
+      end
+      treesitter.install(opts.install)
     end
   },
 }
-

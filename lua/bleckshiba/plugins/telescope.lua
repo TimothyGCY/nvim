@@ -51,6 +51,7 @@ return {
               ["q"] = actions.close
             },
           },
+          preview = { treesitter = false },
           file_ignore_pattern = { '^.fvm\\' }
         },
         extensions = {

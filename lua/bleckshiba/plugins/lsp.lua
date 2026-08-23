@@ -2,7 +2,12 @@ return {
   'neovim/nvim-lspconfig',
   dependencies = {
     -- LSP Support
-    'williamboman/mason.nvim',
+    {
+      'williamboman/mason.nvim',
+      config = function()
+        require('mason').setup()
+      end,
+    },
     {
       'williamboman/mason-lspconfig.nvim',
       opts = {
@@ -89,14 +94,7 @@ return {
       },
     })
 
-    local lspconfig_defaults = require('lspconfig').util.default_config
-    lspconfig_defaults.capabilities = vim.tbl_deep_extend(
-      'force',
-      lspconfig_defaults.capabilities,
-      require('cmp_nvim_lsp').default_capabilities()
-    )
-
-    require('mason').setup()
+    local capabilities = require('cmp_nvim_lsp').default_capabilities()
 
     require('mason-lspconfig').setup({
       ensure_installed = {
@@ -107,11 +105,15 @@ return {
         function(server_name)
           print('setup server: ' .. server_name)
           if server_name == 'jdtls' then return end
-          require('lspconfig')[server_name].setup({})
+          vim.lsp.config(server_name, {
+            capabilities = capabilities,
+          })
+          vim.lsp.enable(server_name)
         end,
 
         lua_ls = function()
-          require('lspconfig').lua_ls.setup({
+          vim.lsp.config('lua_ls', {
+            capabilities = capabilities,
             -- settings = {
             --   Lua = {
             --     runtime = { version = 'LuatJIT' },
@@ -120,10 +122,43 @@ return {
             --   }
             -- }
           })
+          vim.lsp.enable('lua_ls')
         end,
+
+        sourcekit = function()
+          vim.lsp.config('sourcekit', {
+            capabilities = capabilities,
+          })
+          vim.lsp.enable('sourcekit')
+        end,
+
         jdtls = function() end
       }
     })
+
+    local swift_lsp = vim.api.nvim_create_augroup("swift_lsp", { clear = true })
+    vim.api.nvim_create_autocmd("FileType", {
+      pattern = { "swift" },
+      callback = function()
+        print('setting up swift lsp')
+        local root_dir = vim.fs.dirname(vim.fs.find({
+          "Package.swift",
+          ".git",
+        }, { upward = true })[1])
+        local client = vim.lsp.start({
+          name = "sourcekit-lsp",
+          cmd = { "sourcekit-lsp" },
+          root_dir = root_dir,
+        })
+        vim.lsp.buf_attach_client(0, client)
+      end,
+      group = swift_lsp,
+    })
+
+    vim.lsp.config('sourcekit', {
+      capabilities = capabilities,
+    })
+    vim.lsp.enable('sourcekit')
 
     local cmp = require('cmp')
     require('luasnip.loaders.from_vscode').lazy_load()
