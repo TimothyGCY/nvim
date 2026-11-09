@@ -1,93 +1,55 @@
-return {
-  {
-    'nvim-telescope/telescope.nvim',
-    tag = '0.1.8',
-    dependencies = {
-      'nvim-lua/plenary.nvim',
-      -- {
-      --   'nvim-telescope/telescope-fzf-native.nvim',
-      --   build =
-      --   'cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release && cmake --install build --prefix build',
-      -- }
-    },
-    config = function()
-      local status, telescope = pcall(require, 'telescope')
-      if not status then return end
+local telescope = require("telescope")
+local builtin = require("telescope.builtin")
+local actions = require("telescope.actions")
+local browser_actions = require("telescope._extensions.file_browser.actions")
 
-      -- telescope.load_extension('fzf')
-      telescope.load_extension('flutter')
+telescope.setup({
+	defaults = {
+		mappings = { n = { q = actions.close } },
+		preview = { treesitter = false },
+		file_ignore_patterns = { "%.fvm[/\\]" },
+	},
+	extensions = {
+		file_browser = {
+			theme = "dropdown",
+			-- Oil remains the default directory browser.
+			hijack_netrw = false,
+			mappings = {
+				n = {
+					N = browser_actions.create,
+					h = browser_actions.goto_parent_dir,
+					["/"] = function()
+						vim.cmd.startinsert()
+					end,
+				},
+			},
+		},
+	},
+})
+telescope.load_extension("file_browser")
 
-      local builtin = require('telescope.builtin')
-      local actions = require('telescope.actions')
+local map = function(lhs, rhs, desc)
+	vim.keymap.set("n", lhs, rhs, { silent = true, desc = desc })
+end
 
-      vim.keymap.set('n', 'ff', function()
-        builtin.find_files({ hidden = true })
-      end, {})
-      vim.keymap.set('n', '<C-f>', function()
-        builtin.live_grep()
-      end, { desc = "Live Grep" })
-      vim.keymap.set('n', '<leader><C-f>', function()
-        builtin.grep_string({ search = vim.fn.input("grep > ") })
-      end, { desc = 'Grep' })
-
-      -- Git related
-      vim.keymap.set('n', '<leader>gs', builtin.git_status, {})
-      vim.keymap.set('n', '<leader>gc', builtin.git_commits, {})
-
-      -- Flutter commands
-      vim.keymap.set('n', '<leader>fc', ':Telescope flutter commands<Return>', {})
-
-      -- Telescope with File Browser extension
-      local function telescope_buffer_dir()
-        return vim.fn.expand('%:p:h')
-      end
-
-      local file_browser_actions = require 'telescope'.extensions.file_browser.actions
-
-      telescope.setup {
-        defaults = {
-          mappings = {
-            n = {
-              ["q"] = actions.close
-            },
-          },
-          preview = { treesitter = false },
-          file_ignore_pattern = { '^.fvm\\' }
-        },
-        extensions = {
-          file_browser = {
-            theme = "dropdown",
-            hijack_netrw = true,
-            file_ignore_pattern = { '^.fvm\\' },
-            mappings = {
-              ["i"] = {
-                ["<C-w>"] = function() vim.cmd('normal vbd') end,
-              },
-              ["n"] = {
-                ["N"] = file_browser_actions.create,
-                ["h"] = file_browser_actions.goto_parent_dir,
-                ["/"] = function() vim.cmd('startinsert') end,
-              },
-            },
-          },
-        },
-      }
-
-      telescope.load_extension('file_browser')
-
-      vim.keymap.set('n', 'sf', function()
-        telescope.extensions.file_browser.file_browser({
-          path = "%:p:h",
-          cwd = telescope_buffer_dir(),
-          respect_gitignore = false,
-          hidden = true,
-          group = true,
-          previewer = false,
-          initial_mode = "normal",
-          layout_config = { height = 40 }
-        })
-      end)
-    end
-  },
-  'nvim-telescope/telescope-file-browser.nvim',
-}
+map("ff", function()
+	builtin.find_files({ hidden = true })
+end, "Telescope find files")
+map("<C-f>", builtin.live_grep, "Telescope live grep")
+map("<leader><C-f>", function()
+	builtin.grep_string({ search = vim.fn.input("grep > ") })
+end, "Telescope grep")
+map("<leader>gS", builtin.git_status, "Telescope Git status")
+map("<leader>gc", builtin.git_commits, "Telescope Git commits")
+map("<leader>fb", function()
+	local dir = vim.fn.expand("%:p:h")
+	telescope.extensions.file_browser.file_browser({
+		path = dir,
+		cwd = dir,
+		respect_gitignore = false,
+		hidden = true,
+		grouped = true,
+		previewer = false,
+		initial_mode = "normal",
+	})
+end, "Telescope file browser")

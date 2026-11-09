@@ -30,11 +30,6 @@ keymap.set('n', 'dw', 'vb"_d')
 -- Select all
 keymap.set('n', '<C-a>', 'gg<S-v>G')
 
--- Diagnostic
-keymap.set('n', '<C-j>', function()
-  vim.diagnostic.goto_next()
-end, opts)
-
 keymap.set('n', 'K', "<cmd>lua vim.lsp.buf.hover({ border = 'rounded' })<cr>", opts)
 keymap.set('n', 'gd', '<cmd>tab split | lua vim.lsp.buf.definition()<cr>', opts)
 keymap.set('n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<cr>', opts)
