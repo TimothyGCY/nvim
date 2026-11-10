@@ -29,6 +29,7 @@ vim.pack.add({
 	{ src = gh("brenoprata10/nvim-highlight-colors") },
 	-- LSP
 	{ src = gh("neovim/nvim-lspconfig") },
+	{ src = gh("mfussenegger/nvim-jdtls") },
 	{ src = gh("mason-org/mason.nvim") },
 	{ src = gh("WhoIsSethDaniel/mason-tool-installer.nvim") },
 	-- Util

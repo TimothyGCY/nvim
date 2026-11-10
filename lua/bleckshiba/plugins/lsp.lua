@@ -5,17 +5,15 @@ require("mason-tool-installer").setup({
 		"lua-language-server",
 		"prettier",
 		"prettierd",
-		"selene",
-		"shellcheck",
-		"shfmt",
 		"stylua",
 		"eslint-lsp",
 		"oxlint",
 		"oxfmt",
 		"tailwindcss-language-server",
 		"vtsls",
-		"copilot-language-server",
 		"rust-analyzer",
+		"jdtls",
+		"gopls",
 	},
 	auto_update = false,
 	run_on_start = true,
@@ -33,6 +31,172 @@ vim.lsp.config("*", {
 	capabilities = require("blink.cmp").get_lsp_capabilities(capabilities),
 })
 
+-- JAVA
+local jdk17 = "C:/Program Files/Microsoft/jdk-17.0.21.21-hotspot"
+local jdk21 = "C:/Program Files/Microsoft/jdk-21.0.13.21-hotspot"
+-- The installed JDTLS build requires Java 25; project JDKs can remain 17/21.
+local jdtls_java = vim.env.JDTLS_JAVA_HOME or "D:/JetBrains/IntelliJ IDEA/jbr"
+
+local lsp_dir = vim.fn.stdpath("data") .. "/mason/packages"
+local jdtls_dir = lsp_dir .. "/jdtls"
+
+local config_dir = ""
+if vim.fn.has("mac") == 1 then
+	config_dir = "config_mac"
+elseif vim.fn.has("unix") == 1 then
+	config_dir = "config_linux"
+else
+	config_dir = "config_win"
+end
+
+local java_workspace = vim.fn.stdpath("data") .. "/jdtls-workspace"
+
+vim.lsp.config.jdtls = {
+	-- Advertise hover in the initialize response instead of waiting for the
+	-- workspace import to dynamically register it. Requests can then queue.
+	capabilities = { textDocument = { hover = { dynamicRegistration = false } } },
+	-- JDTLS must know the Gradle JVM before importing the workspace. Applying it
+	-- only via didChangeConfiguration can synchronously reimport every module.
+	before_init = function(params, config)
+		params.initializationOptions = params.initializationOptions or {}
+		params.initializationOptions.settings = vim.deepcopy(config.settings)
+	end,
+	-- Resolve the root for each Java buffer, including projects opened after startup.
+	root_markers = {
+		{ "mvnw", "gradlew", "settings.gradle", "settings.gradle.kts", ".git" },
+		{ "pom.xml", "build.gradle", "build.gradle.kts", "build.xml" },
+	},
+	cmd = function(dispatchers, config)
+		-- Check at launch so Neovim and Mason can start before JDTLS is installed.
+		-- nosuf=true bypasses 'wildignore', which hides *.jar in our editor options.
+		local launcher = vim.fn.glob(jdtls_dir .. "/plugins/org.eclipse.equinox.launcher_*.jar", true, true)[1]
+		assert(launcher and vim.fn.filereadable(launcher) == 1, "JDTLS launcher not found. Run :MasonInstall jdtls")
+		assert(
+			vim.fn.executable(jdtls_java .. "/bin/java.exe") == 1,
+			"Set JDTLS_JAVA_HOME to your Java 25 installation"
+		)
+		local root = config.root_dir or vim.fn.getcwd()
+		local workspace = vim.fs.joinpath(
+			java_workspace,
+			vim.fs.basename(root) .. "-" .. vim.fn.sha256(vim.fs.normalize(root)):sub(1, 12)
+		)
+		-- A JdtWipeDataAndRestart must not remove the configuration used to relaunch.
+		local configuration = vim.fs.joinpath(java_workspace .. "-config", vim.fs.basename(workspace))
+		vim.fn.mkdir(configuration, "p")
+		local config_ini = vim.fs.joinpath(configuration, "config.ini")
+		if vim.fn.filereadable(config_ini) == 0 then
+			vim.fn.writefile(vim.fn.readfile(jdtls_dir .. "/" .. config_dir .. "/config.ini", "b"), config_ini, "b")
+		end
+		local cmd = {
+			jdtls_java .. "/bin/java.exe",
+			"-Declipse.application=org.eclipse.jdt.ls.core.id1",
+			"-Dosgi.bundles.defaultStartLevel=4",
+			"-Declipse.product=org.eclipse.jdt.ls.core.product",
+			"-Dlog.protocol=true",
+			"-Dlog.level=ALL",
+			"-javaagent:" .. jdtls_dir .. "/lombok.jar",
+			"-Xms1g",
+			"--add-modules=ALL-SYSTEM",
+			"--add-opens",
+			"java.base/java.util=ALL-UNNAMED",
+			"--add-opens",
+			"java.base/java.lang=ALL-UNNAMED",
+			"-jar",
+			launcher,
+			"-configuration",
+			configuration,
+			"-data",
+			workspace,
+		}
+		-- nvim-jdtls helpers inspect the active client's cmd table for -data.
+		-- Native LSP passes a per-client config copy, so other projects keep the factory.
+		config.cmd = cmd
+		return vim.lsp.rpc.start(cmd, dispatchers, {
+			cwd = config.cmd_cwd,
+			env = config.cmd_env,
+			detached = config.detached,
+		})
+	end,
+	settings = {
+		java = {
+			-- Avoid rebuilding and running annotation processors across every module
+			-- on startup/save. Use Gradle or :JdtCompile when a build is needed.
+			autobuild = { enabled = false },
+			-- Eclipse output is not a source tree. Refreshing generated files in bin
+			-- caused thousands of build-path errors during workspace diagnostics.
+			project = { resourceFilters = { "node_modules", "\\.git", "\\.gradle", "bin" } },
+			diagnostic = { filter = { "**/bin/**" } },
+			eclipse = { downloadSources = true },
+			configuration = {
+				runtimes = {
+					{
+						name = "JavaSE-17",
+						path = jdk17,
+					},
+					{
+						name = "JavaSE-21",
+						path = jdk21,
+						default = true,
+					},
+				},
+			},
+			-- Run Gradle with the project JDK rather than the server's Java 25.
+			import = {
+				gradle = {
+					java = { home = jdk21 },
+					-- Use Gradle for MapStruct/JPA generation instead of running
+					-- processors for every module inside the language server.
+					annotationProcessing = { enabled = false },
+				},
+			},
+			maven = { downloadSources = true },
+			implementationCodeLens = "none",
+			referencesCodeLens = { enabled = false },
+			references = { includeDecompiledSources = true },
+			format = {
+				enabled = true,
+				settings = {
+					url = vim.uri_from_fname(vim.fs.joinpath(vim.fn.stdpath("config"), "GoogleStyle.xml")),
+				},
+				tabSize = 2,
+			},
+			signatureHelp = { enabled = true },
+			["jdt.ls.lombokSupport"] = { enabled = false },
+			completion = {
+				favoriteStaticMembers = {
+					"org.junit.jupiter.api.Assertions.*",
+					"org.mockito.Mockito.*",
+				},
+				importOrder = {
+					"java",
+					"javax",
+					"com",
+					"org",
+				},
+			},
+			sources = {
+				organizeImports = {
+					starThreshold = 9999,
+					staticStarThreshold = 9999,
+				},
+			},
+			codeGeneration = { useBlocks = true },
+			inlayHints = {
+				parameterNames = { enabled = "all" },
+			},
+		},
+	},
+	-- nvim-jdtls registers its own LspAttach handler.
+	init_options = {
+		bundles = vim.fn.glob(
+			lsp_dir .. "/java-debug-adapter/extension/server/com.microsoft.java.debug.plugin-*.jar",
+			true,
+			true
+		),
+	},
+	flags = { allow_incremental_sync = true },
+}
+
 vim.lsp.enable({
 	"eslint",
 	"oxlint",
@@ -42,257 +206,6 @@ vim.lsp.enable({
 	"tailwindcss",
 	"glsl_analyzer",
 	"rust_analyzer",
+	"jdtls",
+	"gopls",
 })
-
--- return {
---   'neovim/nvim-lspconfig',
---   dependencies = {
---     -- LSP Support
---     {
---       'williamboman/mason.nvim',
---       config = function()
---         require('mason').setup()
---       end,
---     },
---     {
---       'williamboman/mason-lspconfig.nvim',
---       opts = {
---         automatic_enable = {
---           exclude = { 'jdtls' }
---         }
---       }
---     },
--- 
---     {
---       "folke/lazydev.nvim",
---       ft = "lua", -- only load on lua files
---       opts = {
---         library = {
---           -- See the configuration section for more details
---           -- Load luvit types when the `vim.uv` word is found
---           { path = "${3rd}/luv/library", words = { "vim%.uv" } },
---         },
---       },
---     },
--- 
---     -- Autocomplete
---     'hrsh7th/nvim-cmp',
---     'hrsh7th/cmp-buffer',
---     'hrsh7th/cmp-path',
---     'hrsh7th/cmp-nvim-lsp',
---     'hrsh7th/cmp-nvim-lua',
---     'saadparwaiz1/cmp_luasnip',
--- 
---     -- Code Snippets
---     'L3MON4D3/LuaSnip',
---     'rafamadriz/friendly-snippets',
--- 
---     'mfussenegger/nvim-jdtls',
---   },
---   config = function()
---     vim.lsp.enable('jdtls')
---     local autoformat_filetypes = { 'lua' }
---     -- vim.api.nvim_create_autocmd('FileType', {
---     --   pattern = 'java',
---     --   callback = function(args)
---     --     require 'jdtls.jdtls_setup'.setup()
---     --   end
---     -- })
---     vim.api.nvim_create_autocmd('LSPAttach', {
---       callback = function(args)
---         local client = vim.lsp.get_client_by_id(args.data.client_id)
---         if not client then return end
---         if vim.tbl_contains(autoformat_filetypes, vim.bo.filetype) then
---           vim.api.nvim_create_autocmd('BufWritePre', {
---             buffer = args.buf,
---             callback = function()
---               vim.lsp.buf.format({
---                 formatting_options = { tabSize = 2, insertSpaces = true },
---                 bufnr = args.buf,
---                 id = client.id
---               })
---             end
---           })
---         end
---       end
---     })
--- 
---     -- vim.lsp.buf.hover = vim.lsp.buf.hover({ border = 'rounded' })
--- 
---     -- vim.lsp.buf.signature_help = vim.lsp.buf.signature_help({ border = 'rounded' })
--- 
---     vim.diagnostic.config({
---       virtual_text = true,
---       severity_sort = true,
---       float = {
---         style = 'minimal',
---         border = 'rounded',
---         header = '',
---         prefix = '',
---       },
---       signs = {
---         text = {
---           [vim.diagnostic.severity.ERROR] = '✘',
---           [vim.diagnostic.severity.WARN] = '▲',
---           [vim.diagnostic.severity.HINT] = '⚑',
---           [vim.diagnostic.severity.INFO] = '»',
---         },
---       },
---     })
--- 
---     local capabilities = require('cmp_nvim_lsp').default_capabilities()
--- 
---     require('mason-lspconfig').setup({
---       ensure_installed = {
---         'lua_ls', 'eslint', 'ts_ls'
---       },
---       automatic_installation = true,
---       handlers = {
---         function(server_name)
---           print('setup server: ' .. server_name)
---           if server_name == 'jdtls' then return end
---           vim.lsp.config(server_name, {
---             capabilities = capabilities,
---           })
---           vim.lsp.enable(server_name)
---         end,
--- 
---         lua_ls = function()
---           vim.lsp.config('lua_ls', {
---             capabilities = capabilities,
---             -- settings = {
---             --   Lua = {
---             --     runtime = { version = 'LuatJIT' },
---             --     diagnostics = { globals = { 'vim' } },
---             --     workspace = { library = { vim.env.VIMRUNTIME } }
---             --   }
---             -- }
---           })
---           vim.lsp.enable('lua_ls')
---         end,
--- 
---         sourcekit = function()
---           vim.lsp.config('sourcekit', {
---             capabilities = capabilities,
---           })
---           vim.lsp.enable('sourcekit')
---         end,
--- 
---         jdtls = function() end
---       }
---     })
--- 
---     local swift_lsp = vim.api.nvim_create_augroup("swift_lsp", { clear = true })
---     vim.api.nvim_create_autocmd("FileType", {
---       pattern = { "swift" },
---       callback = function()
---         print('setting up swift lsp')
---         local root_dir = vim.fs.dirname(vim.fs.find({
---           "Package.swift",
---           ".git",
---         }, { upward = true })[1])
---         local client = vim.lsp.start({
---           name = "sourcekit-lsp",
---           cmd = { "sourcekit-lsp" },
---           root_dir = root_dir,
---         })
---         vim.lsp.buf_attach_client(0, client)
---       end,
---       group = swift_lsp,
---     })
--- 
---     vim.lsp.config('sourcekit', {
---       capabilities = capabilities,
---     })
---     vim.lsp.enable('sourcekit')
--- 
---     local cmp = require('cmp')
---     require('luasnip.loaders.from_vscode').lazy_load()
---     vim.opt.completeopt = { 'menu', 'menuone', 'noselect' }
---     cmp.setup({
---       preselect = 'item',
---       completion = {
---         completeotp = 'menu,menuone,noinsert'
---       },
---       window = { documenation = cmp.config.window.bordered() },
---       sources = {
---         { name = 'path' },
---         { name = 'nvim_lsp' },
---         { name = 'buffer',  keyword_length = 3 },
---         { name = 'luasnip', keyword_length = 2 },
---       },
---       snippet = {
---         expand = function(args)
---           require('luasnip').lsp_expand(args.body)
---         end,
---       },
---       formatting = {
---         fields = { 'abbr', 'menu', 'kind' },
---         format = function(entry, item)
---           local n = entry.source.name
---           if n == 'nvim_lsp' then
---             item.menu = '[LSP]'
---           else
---             item.menu = string.format('[%s]', n)
---           end
---           return item
---         end,
---       },
---       mapping = cmp.mapping.preset.insert({
---         -- confirm completion item
---         ['<CR>'] = cmp.mapping.confirm({ select = false }),
--- 
---         -- scroll documentation window
---         ['<C-f>'] = cmp.mapping.scroll_docs(5),
---         ['<C-u>'] = cmp.mapping.scroll_docs(-5),
--- 
---         -- toggle completion menu
---         ['<C-e>'] = cmp.mapping(function(_)
---           if cmp.visible() then
---             cmp.abort()
---           else
---             cmp.complete()
---           end
---         end),
--- 
---         -- tab complete
---         -- ['<Tab>'] = cmp.mapping(function(fallback)
---         --   local col = vim.fn.col('.') - 1
--- 
---         --   if cmp.visible() then
---         --     cmp.select_next_item({ behavior = 'select' })
---         --   elseif col == 0 or vim.fn.getline('.'):sub(col, col):match('%s') then
---         --     fallback()
---         --   else
---         --     cmp.complete()
---         --   end
---         -- end, { 'i', 's' }),
--- 
---         -- go to previous item
---         -- ['<S-Tab>'] = cmp.mapping.select_prev_item({ behavior = 'select' }),
--- 
---         -- navigate to next snippet placeholder
---         ['<C-d>'] = cmp.mapping(function(fallback)
---           local luasnip = require('luasnip')
--- 
---           if luasnip.jumpable(1) then
---             luasnip.jump(1)
---           else
---             fallback()
---           end
---         end, { 'i', 's' }),
--- 
---         -- navigate to the previous snippet placeholder
---         ['<C-b>'] = cmp.mapping(function(fallback)
---           local luasnip = require('luasnip')
--- 
---           if luasnip.jumpable(-1) then
---             luasnip.jump(-1)
---           else
---             fallback()
---           end
---         end, { 'i', 's' }),
---       }),
---     })
---   end,
--- }
