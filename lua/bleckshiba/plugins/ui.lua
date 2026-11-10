@@ -2,11 +2,11 @@ local icons = BleckShiba.icons
 local lualine_utils = require("bleckshiba.utils.lualine")
 local lazygit_utils = require("bleckshiba.utils.lazygit")
 
-require("kanagawa-paper").setup({
-	style = "vivid",
-	transparent = true,
-})
-vim.cmd.colorscheme("kanagawa-paper-ink")
+-- require("kanagawa-paper").setup({
+-- 	style = "vivid",
+-- 	transparent = true,
+-- })
+vim.cmd.colorscheme("unokai")
 
 require("mini.icons").setup()
 require("mini.icons").mock_nvim_web_devicons()

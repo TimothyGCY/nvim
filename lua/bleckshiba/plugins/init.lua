@@ -1,4 +1,4 @@
-gh = function(x)
+local gh = function(x)
 	return "https://github.com/" .. x
 end
 
@@ -25,6 +25,7 @@ vim.pack.add({
 	{ src = gh("folke/todo-comments.nvim") },
 	{ src = gh("lewis6991/gitsigns.nvim") },
 	{ src = gh("linrongbin16/gitlinker.nvim") },
+	{ src = gh("tpope/vim-fugitive") },
 	{ src = gh("brenoprata10/nvim-highlight-colors") },
 	-- LSP
 	{ src = gh("neovim/nvim-lspconfig") },
