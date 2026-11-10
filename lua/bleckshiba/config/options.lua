@@ -113,10 +113,3 @@ require("vim._core.ui2").enable({
 		pager = { height = 0.5 },
 	},
 })
-
--- File type
-vim.filetype.add({
-	extension = {
-		arb = "json",
-	},
-})
