@@ -13,7 +13,6 @@ vim.pack.add({
 	{ src = gh("folke/trouble.nvim") },
 	{ src = gh("nvim-lualine/lualine.nvim") },
 	{ src = gh("b0o/incline.nvim") },
-	{ src = gh("esmuellert/codediff.nvim") },
 	{ src = gh("rachartier/tiny-cmdline.nvim") },
 	-- Editor
 	{ src = gh("stevearc/conform.nvim") },
@@ -26,7 +25,11 @@ vim.pack.add({
 	{ src = gh("lewis6991/gitsigns.nvim") },
 	{ src = gh("linrongbin16/gitlinker.nvim") },
 	{ src = gh("tpope/vim-fugitive") },
+	{ src = gh("kdheepak/lazygit.nvim") },
 	{ src = gh("brenoprata10/nvim-highlight-colors") },
+	{ src = gh("MeanderingProgrammer/render-markdown.nvim") },
+	{ src = gh("folke/todo-comments.nvim") },
+	{ src = gh("TimothyGCY/todo.nvim") },
 	-- LSP
 	{ src = gh("neovim/nvim-lspconfig") },
 	{ src = gh("mfussenegger/nvim-jdtls") },
@@ -34,7 +37,6 @@ vim.pack.add({
 	{ src = gh("WhoIsSethDaniel/mason-tool-installer.nvim") },
 	-- Util
 	{ src = gh("stevearc/oil.nvim") },
-	{ src = gh("zbirenbaum/copilot.lua") },
 	{ src = gh("nvim-telescope/telescope.nvim") },
 	{ src = gh("nvim-telescope/telescope-file-browser.nvim") },
 	-- Dart / Flutter
@@ -53,5 +55,3 @@ require("bleckshiba.plugins.editor")
 require("bleckshiba.plugins.lsp")
 require("bleckshiba.plugins.utils")
 require("bleckshiba.plugins.keymaps")
-require("bleckshiba.plugins.telescope")
-require("bleckshiba.plugins.dart")
